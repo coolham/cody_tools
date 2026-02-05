@@ -48,8 +48,11 @@ OpenClaw Tools provides a set of Python utilities designed to extend and enhance
 ### From Source
 
 ```bash
+# Clone the repository
 git clone https://github.com/coolham/cody_tools.git
 cd cody_tools
+
+# Install the openclaw-tools package
 pip install -e .
 ```
 
@@ -247,3 +250,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For issues, questions, or contributions, please visit the [GitHub repository](https://github.com/coolham/cody_tools).
+
+---
+
+**Note:** This package is part of the `cody_tools` repository, which is a collection of tools and utilities. The package itself is distributed as `openclaw-tools` on PyPI (when published).
