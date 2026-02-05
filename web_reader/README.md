@@ -40,7 +40,55 @@ print(result)
 
 ---
 
-## 策略二：Playwright（兜底方案）
+## 策略二：Firecrawl（AI 驱动）
+
+使用 Firecrawl API 智能抓取网页，自动处理 JS 渲染和反爬虫。
+
+### 特点
+
+- AI 驱动，自动处理 JavaScript 渲染
+- 自动绕过反爬机制
+- 直接返回干净的 Markdown
+- 支持提取元数据
+
+### 安装依赖
+
+```bash
+pip install firecrawl-py
+```
+
+### 使用方法
+
+```python
+from web_reader import read_with_firecrawl
+import os
+
+# 设置 API Key
+os.environ['FIRECRAWL_API_KEY'] = 'your-api-key'
+
+# 基本用法
+result, error = read_with_firecrawl('https://example.com/article')
+if error:
+    print(f"读取失败: {error}")
+else:
+    print(f"标题: {result['title']}")
+    print(f"内容: {result['markdown'][:500]}...")
+    print(f"元数据: {result['metadata']}")
+
+# 直接传入 API Key
+result, error = read_with_firecrawl(
+    'https://example.com',
+    api_key='your-api-key'
+)
+```
+
+### 获取 API Key
+
+访问 https://firecrawl.dev 注册并获取 API Key。
+
+---
+
+## 策略三：Playwright（兜底方案）
 
 使用真实浏览器访问页面，处理复杂场景（需要登录、反爬虫等）。
 
@@ -106,6 +154,7 @@ success, error = save_storage_state(
 |------|---------|
 | 普通网页、新闻文章 | Jina Reader |
 | 微信公众号 | Jina Reader |
+| 复杂页面、JS 渲染 | Firecrawl |
+| 反爬虫严格 | Firecrawl / Playwright |
 | 需要登录的页面 | Playwright + 登录态 |
-| 反爬虫严格的网站 | Playwright |
-| 需要执行 JS 的页面 | Playwright |
+| 淘宝等需登录电商 | Playwright + 登录态 |

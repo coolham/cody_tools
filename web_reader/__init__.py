@@ -8,6 +8,10 @@ from .playwright_reader import (
     read_webpage as read_with_playwright,
     save_storage_state
 )
+from .firecrawl_reader import (
+    read_webpage_firecrawl,
+    read_webpage as read_with_firecrawl
+)
 
 __all__ = [
     # Jina Reader
@@ -18,4 +22,7 @@ __all__ = [
     'read_webpage_playwright',
     'read_with_playwright',
     'save_storage_state',
+    # Firecrawl Reader
+    'read_webpage_firecrawl',
+    'read_with_firecrawl',
 ]
