@@ -6,22 +6,65 @@ Tools for OpenClaw - 为 OpenClaw AI 助手打造的各种实用工具集合。
 
 ```
 cody_tools/
-├── url_utils/          # URL 工具
-│   ├── platform_identifier.py  # URL 平台识别
+├── url_utils/              # URL 工具
+│   ├── platform_identifier.py
 │   └── README.md
 │
-└── web_reader/         # 网页内容提取
-    ├── jina_reader.py          # Jina Reader 策略
-    ├── firecrawl_reader.py     # Firecrawl AI 策略
-    ├── playwright_reader.py    # Playwright 兜底策略
+├── web_reader/             # 网页内容提取
+│   ├── jina_reader.py
+│   ├── firecrawl_reader.py
+│   ├── playwright_reader.py
+│   └── README.md
+│
+└── smart_url_reader/       # URL 智能读取 SKILL
+    ├── smart_reader.py
+    ├── obsidian_sync.py
+    ├── cli.py
     └── README.md
 ```
 
 ---
 
-## 🔧 功能模块
+## 🌟 核心功能
 
-### 1. URL 平台识别 (url_utils)
+### 1. URL 智能读取器 (smart_url_reader) ⭐推荐
+
+一键抓取任何网站内容，自动选择最佳策略，并同步到 Obsidian。
+
+**特点：**
+- 🤖 智能策略选择（Jina → Firecrawl → Playwright）
+- 📋 自动识别 7 大平台
+- 📝 一键同步到 Obsidian
+- 🖥️ 支持命令行使用
+
+**快速使用：**
+
+```python
+from smart_url_reader import smart_read_url, sync_read_result_to_obsidian
+
+# 智能读取
+result, error = smart_read_url('https://mp.weixin.qq.com/s/xxxxxx')
+
+# 同步到 Obsidian
+sync_read_result_to_obsidian(
+    result=result,
+    vault_path='/path/to/obsidian/vault',
+    folder='Clippings'
+)
+```
+
+**命令行使用：**
+
+```bash
+python -m smart_url_reader.cli "https://zhuanlan.zhihu.com/p/123456" \
+    --vault "/Users/name/Documents/Obsidian/Vault"
+```
+
+**详细文档：** [smart_url_reader/README.md](smart_url_reader/README.md)
+
+---
+
+### 2. URL 平台识别 (url_utils)
 
 识别 URL 所属的平台及其访问限制。
 
@@ -51,17 +94,13 @@ print(f"平台: {platform}, 需要登录: {requires_login}")
 
 ---
 
-### 2. 网页内容提取 (web_reader)
+### 3. 网页内容提取 (web_reader)
 
-提供三种策略读取网页内容，适应不同场景。
+提供三种策略读取网页内容，供 `smart_url_reader` 调用。
 
-#### 2.1 Jina Reader (推荐)
+#### 策略一：Jina Reader (推荐)
 
 使用免费服务快速提取网页内容。
-
-- ✅ 完全免费
-- ✅ 速度快，无需等待
-- ✅ 返回 Markdown 格式
 
 ```python
 from web_reader import read_with_jina
@@ -69,30 +108,21 @@ from web_reader import read_with_jina
 content, error = read_with_jina('https://example.com/article')
 ```
 
-#### 2.2 Firecrawl (AI 驱动)
+#### 策略二：Firecrawl (AI 驱动)
 
 AI 驱动的网页抓取，自动处理 JS 渲染和反爬虫。
 
-- ✅ 自动绕过反爬机制
-- ✅ 支持复杂页面
-- ⚠️ 需要 API Key
-
 ```python
 from web_reader import read_with_firecrawl
-import os
 
 os.environ['FIRECRAWL_API_KEY'] = 'your-api-key'
 result, error = read_with_firecrawl('https://example.com')
 # result: {title, markdown, metadata, url, length}
 ```
 
-#### 2.3 Playwright (兜底方案)
+#### 策略三：Playwright (兜底方案)
 
 使用真实浏览器访问，处理需登录页面。
-
-- ✅ 支持登录态加载
-- ✅ 模拟真实浏览器
-- ⚠️ 需要安装浏览器
 
 ```python
 from web_reader import read_with_playwright, save_storage_state
@@ -137,16 +167,24 @@ cd cody_tools
 ### 安装依赖
 
 ```bash
-# URL 工具（无额外依赖）
+# URL 智能读取器（基础功能，无依赖）
 
-# 网页读取 - Jina Reader（urllib，Python 内置）
-
-# 网页读取 - Firecrawl
+# Firecrawl 支持
 pip install firecrawl-py
 
-# 网页读取 - Playwright
+# Playwright 支持
 pip install playwright
 playwright install chromium
+```
+
+### 环境变量配置
+
+```bash
+# Obsidian Vault 路径
+export OBSIDIAN_VAULT_PATH="/Users/name/Documents/Obsidian/Vault"
+
+# Firecrawl API Key（可选）
+export FIRECRAWL_API_KEY="your-api-key"
 ```
 
 ---
